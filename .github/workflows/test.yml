@@ -1,13 +1,17 @@
-name: Run tests
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ main ]
-  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+        matrix:
+          dotnet-version: [ '6.0.x' ]  # You can add other versions here
+          test-project:  # Replace with the path to your test project (e.g., ./src.tests)
+            - '**/*NameUtilityTests.csproj'
 
     steps:
       - uses: actions/checkout@v2
@@ -25,3 +29,29 @@ jobs:
 
       - name: Run tests
         run: dotnet test ${{ matrix.test-project }} --no-build --verbosity normal
+
+  deploy:
+    runs-on: ubuntu-latest  # Change to deployment target runner (e.g., Windows runner for IIS)
+    strategy:
+        matrix:
+          dotnet-version: [ '6.0.x' ]  # You can add other versions here
+          test-project:  # Replace with the path to your test project (e.g., ./src.tests)
+            - '**/*NameUtilityTests.csproj'
+
+
+    needs: build  # This job depends on the successful completion of the 'build' job
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Upload artifacts (optional)
+        uses: actions/upload-artifact@v2
+        with:
+          name: name-sorter
+          path: ./bin/Release/*.dll  # Adjust path based on your output location
+
+      - name: Deploy to target 
+        run: |
+          echo "Deployment logic goes here..."  # Replace with actual deployment commands
+          # Example: scp ./bin/Release/*.* user@host:/release
+
