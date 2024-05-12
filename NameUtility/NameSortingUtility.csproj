@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -41,12 +44,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\Sotable\ISortable.cs" />
+    <Compile Include="Data\Sortable\ISortable.cs" />
     <Compile Include="Enums\NameSorterEnum.cs" />
     <Compile Include="SortBuilder.cs" />
     <Compile Include="SortingAlgorithms\ISortingAlgorithm.cs" />
     <Compile Include="SortingAlgorithms\SortingAlgorithmFactory.cs" />
-    <Compile Include="Data\Sotable\Name.cs" />
+    <Compile Include="Data\Sortable\Name.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\FileImportService.cs" />
     <Compile Include="SortingAlgorithms\NameSorterAlphabetical.cs" />

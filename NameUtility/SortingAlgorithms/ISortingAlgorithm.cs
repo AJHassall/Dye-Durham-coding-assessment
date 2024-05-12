@@ -10,6 +10,6 @@ namespace NameUtility.Sorters
 {
     internal interface ISortingAlgorithm
     {
-        IList<ISortable> Sort(IList<ISortable> unsortedNames);
+        IList<T> Sort<T>(IList<T> names) where T : ISortable, new();
     }
 }

@@ -4,6 +4,7 @@ using NameSortingUtility.Services;
 using NameUtility.Data;
 using NameUtility.Sorters;
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,14 +13,13 @@ using System.Threading.Tasks;
 
 namespace NameUtility
 {
-    public class SortBuilder<T> where T : ISortable
+    public class SortBuilder<T> where T : ISortable, new()
     {
         private readonly string FileName;
         private ISortingAlgorithm SortingAlgorithm;
-        private IList<ISortable> Names;
+        private IList<T> Names;
 
         private bool isSortOrderSet = false;
-        private bool isObjectBuilt = false;
 
         public SortBuilder(string fileName) 
         {
@@ -40,7 +40,7 @@ namespace NameUtility
         {
             foreach (var name in Names)
             {
-                Console.WriteLine(name.ReadValue);
+                Console.WriteLine(name.Value);
             }
         }
 
@@ -61,8 +61,8 @@ namespace NameUtility
 
         private void ReadNamesFromFile()
         {
-            var fileImportService = new FileImportService<T>();
-            var unsortedNames = fileImportService.GetValuesFromFile(FileName);
+            var fileImportService = new FileImportService<T>(new StreamReader(FileName));
+            var unsortedNames = fileImportService.GetValuesFromFile();
             Names = unsortedNames;
 
         }
@@ -93,6 +93,6 @@ namespace NameUtility
             return this;
         }
 
-        public IList<ISortable> GetNames() { return Names; }
+        public IList<T> GetNames() { return Names; }
     }
 }

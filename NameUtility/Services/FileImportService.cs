@@ -9,41 +9,49 @@ using System.Threading.Tasks;
 
 namespace NameSortingUtility.Services
 {
-    internal class FileImportService<T> where T : ISortable
+    public class FileImportService<T> where T : ISortable, new()
     {
-        public FileImportService()
+        public readonly StreamReader _streamReader;
+        
+        public FileImportService(StreamReader streamReader)
         {
-
+            _streamReader = streamReader;
         }
 
-        public IList<ISortable> GetValuesFromFile(string fileName)
+        public List<T> GetValuesFromFile()
         {
-            var names = new List<ISortable>();
+            List<T> values = new List<T>();
+
             try
             {
-                using (StreamReader sr = new StreamReader(fileName))
+                using (StreamReader reader = _streamReader)
                 {
                     string line;
-                    while ((line = sr.ReadLine()) != null)
+                    while ((line = reader.ReadLine()) != null)
                     {
-                        var fullName = line.Split(' ');
-                        if (fullName.Length == 0)
+                        try
                         {
-                            continue;
+                            T value = new T(); 
+                            value.Value = line;
+                            values.Add(value);
                         }
-
-                        //add item to list
-                        var name = new Name(fullName);
-                        names.Add(name);
+                        catch (FormatException ex)
+                        {
+                            Console.WriteLine($"Error parsing line '{line}': {ex.Message}");
+                        }
                     }
                 }
             }
-            catch (FileNotFoundException)
+            catch (FileNotFoundException ex)
             {
-                Console.WriteLine("The file cannot be found.");
+                Console.WriteLine($"File not found: {(_streamReader.BaseStream as FileStream).Name} - {ex.Message}");
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error reading file: {(_streamReader.BaseStream as FileStream).Name} - {ex.Message}");
             }
 
-            return names;
+            return values;
         }
     }
 }

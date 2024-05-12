@@ -13,15 +13,22 @@ namespace name_sorter
 {
     internal class Program
     {
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Console.WriteLine("Please specify a file");
+                return -1;
+            }
 
-            var sortBuilder = new SortBuilder<Name>("names.txt")
+            var sortBuilder = new SortBuilder<Name>(args[0])
                 .SetSortOrder(NameSorterEnum.LastNameFirstName)
                 .Build();
 
             sortBuilder.WriteNamesToFile();
             sortBuilder.WriteNamesToConsole();
+
+            return 1;
 
         }
     }

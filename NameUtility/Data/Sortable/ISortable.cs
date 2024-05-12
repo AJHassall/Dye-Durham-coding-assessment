@@ -8,7 +8,7 @@ namespace NameUtility.Data
 {
     public interface ISortable
     {
-        string Value { get; }
-        string ReadValue { get; }
+        string Value { get; set; }
+        string GetValueAsSorted();
     }
 }

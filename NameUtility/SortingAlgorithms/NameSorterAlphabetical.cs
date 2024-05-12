@@ -12,11 +12,12 @@ namespace NameUtility.Sorters
 {
     internal class NameSorterAlphabetical : ISortingAlgorithm
     {
-        public IList<ISortable> Sort(IList<ISortable> unsortedNames)
+
+        public IList<T> Sort<T>(IList<T> unsortedNames) where T : ISortable, new()
         {
-            IList<ISortable> names = new List<ISortable>();
+            IList<T> names = new List<T>();
             var sortedNames = unsortedNames
-                .OrderBy(x => x.Value)
+                .OrderBy(x => x.GetValueAsSorted())
                 .ToList();
 
             return sortedNames;
